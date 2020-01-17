@@ -27,7 +27,7 @@ namespace flows
             {
                 var services = scope.ServiceProvider;
 
-                var factory = services.GetRequiredService<IFlowContextFactory>();
+                var factory = services.GetRequiredService<IFlowDbContextFactory>();
 
                 factory.CreateDbContext(config.GetConnectionString("Database")).Database.Migrate();
             }

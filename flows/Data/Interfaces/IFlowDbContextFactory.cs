@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace flows.Data.Interfaces
 {
-    public interface IFlowContextFactory
+    public interface IFlowDbContextFactory
     {
         FlowDbContext CreateDbContext(string connectionString);
     }

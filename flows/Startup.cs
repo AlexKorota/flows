@@ -26,7 +26,7 @@ namespace flows
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddScoped<IFlowContextFactory, FlowContextFactory>();
+            services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,10 +42,12 @@ namespace flows
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", context => context.Response.WriteAsync("Hello world"));
+
                 endpoints.MapControllerRoute(
                     name: "DefaultApi",
                     pattern: "api/{controller}/{action}");
-                endpoints.MapFallbackToController("Index", "Home");
+                //endpoints.MapFallbackToController("Index", "Home");
             });
         }
     }

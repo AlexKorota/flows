@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace flows.Data.Factories
 {
-    public class FlowContextFactory : IFlowContextFactory
+    public class FlowDbContextFactory : IFlowDbContextFactory
     {
         public FlowDbContext CreateDbContext(string connectionString)
         {
