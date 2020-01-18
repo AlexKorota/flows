@@ -26,5 +26,6 @@ namespace flows.Domain.Models
         public string Name { get; set; }
 
         public string TelegramId { get; set; }
+        public bool IsAdmin { get; }
     }
 }

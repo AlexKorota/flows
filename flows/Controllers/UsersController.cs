@@ -46,7 +46,7 @@ namespace flows.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> ChangeUser(int id,[FromBody] User user)
         {
             if (id != user.Id)
             {
@@ -78,7 +78,7 @@ namespace flows.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> CreatetUser([FromBody]User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
