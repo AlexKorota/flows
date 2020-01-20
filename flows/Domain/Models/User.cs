@@ -11,7 +11,7 @@ namespace flows.Domain.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(MinimumLength = 6)]
+        [StringLength(240, MinimumLength = 6)]
         public string Password { get; set; }
 
         [Required]
