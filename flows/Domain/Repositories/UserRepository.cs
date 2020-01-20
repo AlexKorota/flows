@@ -21,15 +21,10 @@ namespace flows.Domain.Repositories
             _context.Users.Add(user);
             return _context.SaveChangesAsync();
         }
-        public Task Update(User user)
-        {
-            _context.Users.Update(user);
-            return _context.SaveChangesAsync();
-        }
 
-        public Task<User> GetByEmail(string email)
+        public Task<User> GetByEmailAndPassword(string email, string hashPassword)
         {
-            return _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == hashPassword);
         }
 
         public Task<User> GetById(int id)

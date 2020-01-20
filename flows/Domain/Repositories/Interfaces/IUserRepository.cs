@@ -9,10 +9,9 @@ namespace flows.Domain.Repositories.Interfaces
     public interface IUserRepository
     {
         Task Create(User user);
-        Task Update(User user);
 
         Task<User> GetById(int id);
-        Task<User> GetByEmail(string email);
+        Task<User> GetByEmailAndPassword(string email, string hashPassword);
 
         Task<List<User>> GetList();
     }

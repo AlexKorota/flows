@@ -12,10 +12,6 @@ namespace flows.Domain.Models
 
         [Required]
         [StringLength(30, MinimumLength = 6)]
-        public string Login { get; set; }
-
-        [Required]
-        [StringLength(30, MinimumLength = 6)]
         public string Password { get; set; }
 
         [Required]
