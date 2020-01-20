@@ -1,4 +1,5 @@
-﻿using flows.Domain.Models;
+﻿using flows.Domain.DTO;
+using flows.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace flows.Domain.Services.Interfaces
     public interface IUserService
     {
         Task<User> CreateUserAsync(User user);
-        Task<List<User>> GetUsers();
+        Task<List<UserDTO>> GetUsers();
         Task<User> GetUserByEmailAndPassword(string email, string password);
     }
 }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using flows.Data;
 using flows.Domain.Models;
+using flows.Domain.Services.Interfaces;
+using flows.Domain.DTO;
 
 namespace flows.Controllers
 {
@@ -14,23 +16,23 @@ namespace flows.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly FlowDbContext _context;
+        private readonly IUserService _userService;
 
-        public UsersController(FlowDbContext context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<List<UserDTO>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _userService.GetUsers();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -46,7 +48,7 @@ namespace flows.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUser([FromBody]User user)
+        public async Task<ActionResult<User>> Register([FromBody]User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

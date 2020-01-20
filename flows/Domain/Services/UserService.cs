@@ -11,7 +11,7 @@ namespace flows.Domain.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
         }
@@ -21,14 +21,18 @@ namespace flows.Domain.Services
             return user;
         }
 
-        public Task<User> GetUserByEmailAndPassword(string email, string password)
+        public async Task<User> GetUserByEmailAndPassword(string email, string password)
         {
-            throw new NotImplementedException();
+            User user = await _userRepository.GetByEmailAndPassword(email, hashPassword);
+            if (user == null)
+                throw new NullReferenceException("User not found");
+            return user;
         }
 
-        public Task<List<User>> GetUsers()
+        public async Task<List<UserDTO>> GetUsers()
         {
-            throw new NotImplementedException();
+            var users = await _userRepository.GetList();
+
         }
     }
 }

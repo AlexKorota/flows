@@ -2,8 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using flows.Data.Factories;
 using flows.Data.Interfaces;
+using flows.Domain.Repositories;
+using flows.Domain.Repositories.Interfaces;
+using flows.Domain.Services;
+using flows.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +31,9 @@ namespace flows
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
         }
 
