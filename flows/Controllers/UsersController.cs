@@ -9,6 +9,7 @@ using flows.Data;
 using flows.Domain.Models;
 using flows.Domain.Services.Interfaces;
 using flows.Domain.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace flows.Controllers
 {
@@ -27,21 +28,18 @@ namespace flows.Controllers
         [HttpGet]
         public async Task<ActionResult<List<UserDTO>>> GetUsers()
         {
-            return await _userService.GetUsers();
+            var res = await _userService.GetUsersAsync();
+            return new OkObjectResult(res);
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetUser(int id)
+        [Authorize]
+        [HttpGet("me")]
+        // GET: api/Users/me
+        public async Task<ActionResult<UserDTO>> GetCurrentUser()
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
+            var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
+            var res = _userService.GetCurrentUser(id);
+            return new OkObjectResult(res);
         }
 
         // POST: api/Users
@@ -50,10 +48,7 @@ namespace flows.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Register([FromBody]User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
     }
 }

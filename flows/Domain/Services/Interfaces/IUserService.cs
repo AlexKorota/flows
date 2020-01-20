@@ -9,8 +9,8 @@ namespace flows.Domain.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<User> CreateUserAsync(User user);
-        Task<List<UserDTO>> GetUsers();
-        Task<User> GetUserByEmailAndPassword(string email, string password);
+        Task<List<UserDTO>> GetUsersAsync();
+        Task<UserDTO> GetCurrentUser(int id);
+        Task<User> RegisterUserAsync(UserDTO dto);
     }
 }

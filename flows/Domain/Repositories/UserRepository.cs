@@ -16,6 +16,11 @@ namespace flows.Domain.Repositories
         {
             _context = context;
         }
+
+        public Task<List<User>> GetList()
+        {
+            return _context.Users.ToListAsync();
+        }
         public Task Create(User user)
         {
             _context.Users.Add(user);
@@ -30,11 +35,6 @@ namespace flows.Domain.Repositories
         public Task<User> GetById(int id)
         {
             return _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        }
-
-        public Task<List<User>> GetList()
-        {
-            return _context.Users.ToListAsync();
         }
     }
 }
