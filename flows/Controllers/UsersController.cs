@@ -38,7 +38,7 @@ namespace flows.Controllers
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
         {
             var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
-            var res = _userService.GetCurrentUser(id);
+            var res = _userService.GetCurrentUser(int.Parse(id));
             return new OkObjectResult(res);
         }
 
