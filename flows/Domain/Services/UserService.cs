@@ -30,23 +30,22 @@ namespace flows.Domain.Services
             var user = await _userRepository.GetById(id);
             return _mapper.Map<UserDTO>(user);
         }
-        public async Task<UserDTO> RegisterUserAsync(UserDTO dto)
+        public async Task RegisterUserAsync(RegistrationDTO dto)
         {
             try
             {
                 User user = _mapper.Map<User>(dto);
                 await _userRepository.Create(user);
-            } catch(Exception e)
+            } catch(Exception e) // переделать на разные эксепшены, а не только на 1 общий
             {
                 Console.WriteLine(e);
             }
-            return dto;
         }
 
         public async Task<IReadOnlyCollection<Claim>> GetUserIdentity(CredentialsDTO dto)
         {
             List<Claim> claims = null;
-            var user = await _userRepository.GetByEmailAndPassword(dto.Login, BCrypt.Net.BCrypt.HashPassword(dto.Password, BCrypt.Net.BCrypt.GenerateSalt()));
+            var user = await _userRepository.GetByEmailAndPassword(dto.Email, BCrypt.Net.BCrypt.HashPassword(dto.Password, BCrypt.Net.BCrypt.GenerateSalt())); //TODO: вытащить соль из конфига
             if (user != null)
             {
                 claims = new List<Claim>
@@ -56,6 +55,5 @@ namespace flows.Domain.Services
             }
             return claims;
         }
-
     }
 }

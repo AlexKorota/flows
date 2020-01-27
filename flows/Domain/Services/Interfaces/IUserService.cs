@@ -12,7 +12,7 @@ namespace flows.Domain.Services.Interfaces
     {
         Task<List<UserDTO>> GetUsersAsync();
         Task<UserDTO> GetCurrentUser(int id);
-        Task<UserDTO> RegisterUserAsync(UserDTO dto);
+        Task RegisterUserAsync(RegistrationDTO dto);
         Task<IReadOnlyCollection<Claim>> GetUserIdentity(CredentialsDTO dto);
     }
 }

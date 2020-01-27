@@ -17,8 +17,12 @@ namespace flows.Domain.Mapper
 
         private void CreateUsersMap()
         {
+            CreateMap<RegistrationDTO, User>();
             CreateMap<UserDTO, User>();
             CreateMap<User, UserDTO>();
         }
     }
 }
+
+
+//BCrypt.Net.BCrypt.HashPassword(dto.Password, BCrypt.Net.BCrypt.GenerateSalt())
