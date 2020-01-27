@@ -31,8 +31,14 @@ namespace flows.Domain.Services
         }
         public async Task<UserDTO> RegisterUserAsync(UserDTO dto)
         {
-            User user = _mapper.Map<User>(dto);
-            await _userRepository.Create(user);
+            try
+            {
+                User user = _mapper.Map<User>(dto);
+                await _userRepository.Create(user);
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
             return dto;
         }
 

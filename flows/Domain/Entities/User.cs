@@ -13,14 +13,8 @@ namespace flows.Domain.Entities
 
         [JsonIgnore]
         public string Password { get; set; }
-
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
-
-        [StringLength(15, MinimumLength = 2)]
         public string Name { get; set; }
-
         public string TelegramId { get; set; }
         public bool IsAdmin { get; }
     }

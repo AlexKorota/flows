@@ -32,10 +32,10 @@ namespace flows.Controllers
             return new OkObjectResult(res);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("me")]
         // GET: api/Users/me
-        public async Task<ActionResult<UserDTO>> GetCurrentUser()
+        public async Task<ActionResult<UserDTO>> GetMe()
         {
             //var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
             string id = "1";
@@ -43,8 +43,8 @@ namespace flows.Controllers
             return new OkObjectResult(res);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO userDto)
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDTO>> PostRegister([FromBody] UserDTO userDto)
         {
             var res = await _userService.RegisterUserAsync(userDto); 
             return new OkObjectResult(res);
