@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using flows.Data;
 using flows.Data.Factories;
 using flows.Data.Interfaces;
 using flows.Domain.Repositories;
@@ -20,11 +21,11 @@ namespace flows
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -32,9 +33,10 @@ namespace flows
         {
             services.AddMvc();
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
+            services.AddScoped<IUserRepository, UserRepository>(provider => new UserRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
+            services.AddScoped<IUserService, UserService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

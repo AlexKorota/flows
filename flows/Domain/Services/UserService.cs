@@ -33,7 +33,7 @@ namespace flows.Domain.Services
         {
             User user = _mapper.Map<User>(dto);
             await _userRepository.Create(user);
-            return user;
+            return dto;
         }
 
 
