@@ -32,6 +32,11 @@ namespace flows.Domain.Repositories
             return _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == hashPassword);
         }
 
+        public Task<User> GetByEmail(string email)
+        {
+            return _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public Task<User> GetById(int id)
         {
             return _context.Users.FirstOrDefaultAsync(u => u.Id == id);

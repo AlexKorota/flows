@@ -11,6 +11,6 @@ namespace flows.Domain.Services.Interfaces
     {
         Task<List<UserDTO>> GetUsersAsync();
         Task<UserDTO> GetCurrentUser(int id);
-        Task<User> RegisterUserAsync(UserDTO dto);
+        Task<UserDTO> RegisterUserAsync(UserDTO dto);
     }
 }

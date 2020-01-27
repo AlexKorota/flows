@@ -15,6 +15,7 @@ namespace flows.Domain.Entities
         public string Password { get; set; }
 
         [Required]
+        
         [EmailAddress]
         public string Email { get; set; }
 

@@ -14,6 +14,6 @@ namespace flows.Domain.Repositories.Interfaces
 
         Task<User> GetById(int id);
         Task<User> GetByEmailAndPassword(string email, string hashPassword);
-
+        Task<User> GetByEmail(string email);
     }
 }

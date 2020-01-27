@@ -37,8 +37,16 @@ namespace flows.Controllers
         // GET: api/Users/me
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
         {
-            var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
+            //var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
+            string id = "1";
             var res = await _userService.GetCurrentUser(int.Parse(id));
+            return new OkObjectResult(res);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO userDto)
+        {
+            var res = await _userService.RegisterUserAsync(userDto); 
             return new OkObjectResult(res);
         }
     }

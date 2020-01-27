@@ -29,9 +29,9 @@ namespace flows.Domain.Services
             var user = await _userRepository.GetById(id);
             return _mapper.Map<UserDTO>(user);
         }
-        public async Task<User> RegisterUserAsync(UserDTO user)
+        public async Task<UserDTO> RegisterUserAsync(UserDTO dto)
         {
-            //TODO: Add mapping with md5 hashPassword
+            User user = _mapper.Map<User>(dto);
             await _userRepository.Create(user);
             return user;
         }
