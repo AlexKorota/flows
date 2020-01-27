@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace flows.Domain.Models
+namespace flows.Domain.Entities
 {
     public class User
     {

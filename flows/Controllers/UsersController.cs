@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using flows.Data;
-using flows.Domain.Models;
+using flows.Domain.Entities;
 using flows.Domain.Services.Interfaces;
 using flows.Domain.DTO;
 using Microsoft.AspNetCore.Authorization;
@@ -38,17 +38,8 @@ namespace flows.Controllers
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
         {
             var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
-            var res = _userService.GetCurrentUser(int.Parse(id));
+            var res = await _userService.GetCurrentUser(int.Parse(id));
             return new OkObjectResult(res);
-        }
-
-        // POST: api/Users
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<User>> Register([FromBody]User user)
-        {
-
         }
     }
 }

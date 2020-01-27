@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using flows.Domain.DTO;
-using flows.Domain.Models;
+using flows.Domain.Entities;
 using flows.Domain.Repositories.Interfaces;
 using flows.Domain.Services.Interfaces;
 using System;

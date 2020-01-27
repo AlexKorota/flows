@@ -1,5 +1,5 @@
 ﻿using flows.Data;
-using flows.Domain.Models;
+using flows.Domain.Entities;
 using flows.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
