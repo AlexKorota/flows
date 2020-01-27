@@ -6,6 +6,7 @@ using flows.Domain.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace flows.Domain.Services
@@ -42,6 +43,19 @@ namespace flows.Domain.Services
             return dto;
         }
 
+        public async Task<IReadOnlyCollection<Claim>> GetUserIdentity(CredentialsDTO dto)
+        {
+            List<Claim> claims = null;
+            var user = await _userRepository.GetByEmailAndPassword(dto.Login, BCrypt.Net.BCrypt.HashPassword(dto.Password, BCrypt.Net.BCrypt.GenerateSalt()));
+            if (user != null)
+            {
+                claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email)
+                };
+            }
+            return claims;
+        }
 
     }
 }

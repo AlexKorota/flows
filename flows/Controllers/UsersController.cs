@@ -44,10 +44,20 @@ namespace flows.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> PostRegister([FromBody] UserDTO userDto)
+        public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO userDto)
         {
-            var res = await _userService.RegisterUserAsync(userDto); 
+            var res = await _userService.RegisterUserAsync(userDto);
             return new OkObjectResult(res);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] CredentialsDTO dto)
+        {
+            var identity = await _userService.GetUserIdentity(dto);
+            if (identity == null)
+                return Unauthorized();
+
+            //return configured jwt
         }
     }
 }

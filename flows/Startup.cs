@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using flows.Data;
@@ -10,12 +11,14 @@ using flows.Domain.Repositories;
 using flows.Domain.Repositories.Interfaces;
 using flows.Domain.Services;
 using flows.Domain.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace flows
 {
@@ -32,6 +35,21 @@ namespace flows
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => 
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = "ValidIssuer",
+                        ValidAudience = "ValidateAudience",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IssuerSigningSecretKey")),
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
             services.AddScoped<IUserRepository, UserRepository>(provider => new UserRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
@@ -48,6 +66,7 @@ namespace flows
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
