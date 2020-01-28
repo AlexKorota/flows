@@ -10,6 +10,10 @@ using flows.Domain.Entities;
 using flows.Domain.Services.Interfaces;
 using flows.Domain.DTO;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using flows.Helpers;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace flows.Controllers
 {
@@ -32,14 +36,13 @@ namespace flows.Controllers
             return new OkObjectResult(res);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("me")]
         // GET: api/Users/me
         public async Task<ActionResult<UserDTO>> GetMe()
         {
-            //var id = User.FindFirst(x => x.Type == JwtClaimTypes.Subject).Value;
-            string id = "1";
-            var res = await _userService.GetCurrentUser(int.Parse(id));
+            var email = User.FindFirst(User.Identity.Name)?.Value;
+            var res = await _userService.GetUserAsync(email);
             return new OkObjectResult(res);
         }
 
@@ -53,12 +56,20 @@ namespace flows.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CredentialsDTO dto)
         {
-            var identity = await _userService.GetUserIdentity(dto);
+            var identity = await _userService.GetUserIdentityAsync(dto);
             if (identity == null)
                 return Unauthorized();
 
-            //return configured jwt
-            return new OkResult();
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.ISSUER,
+                audience: AuthOptions.AUDIENCE,
+                notBefore: DateTime.UtcNow,
+                claims: identity,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return new OkObjectResult(new { access_token = encodedJwt });
         }
     }
 }

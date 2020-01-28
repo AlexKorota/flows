@@ -14,14 +14,14 @@ namespace flows.Domain.Repositories
     {
         public UserRepository(string connectionString, IFlowDbContextFactory contextFactory) : base(connectionString, contextFactory) { }
 
-        public async Task<List<User>> GetList()
+        public async Task<List<User>> GetListAsync()
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
                 return await context.Users.ToListAsync();
             }
         }
-        public async Task Create(User user)
+        public async Task CreateAsync(User user)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -30,7 +30,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetAsync(string email)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -38,7 +38,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<User> GetById(int id)
+        public async Task<User> GetAsync(int id)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {

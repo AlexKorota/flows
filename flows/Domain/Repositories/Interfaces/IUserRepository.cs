@@ -8,11 +8,11 @@ namespace flows.Domain.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<List<User>> GetList();
+        Task<List<User>> GetListAsync();
 
-        Task Create(User user);
+        Task CreateAsync(User user);
 
-        Task<User> GetById(int id);
-        Task<User> GetByEmail(string email);
+        Task<User> GetAsync(int id);
+        Task<User> GetAsync(string email);
     }
 }

@@ -11,8 +11,9 @@ namespace flows.Domain.Services.Interfaces
     public interface IUserService
     {
         Task<List<UserDTO>> GetUsersAsync();
-        Task<UserDTO> GetCurrentUser(int id);
+        Task<UserDTO> GetUserAsync(int id);
+        Task<UserDTO> GetUserAsync(string email);
         Task RegisterUserAsync(RegistrationDTO dto);
-        Task<IReadOnlyCollection<Claim>> GetUserIdentity(CredentialsDTO dto);
+        Task<IReadOnlyCollection<Claim>> GetUserIdentityAsync(CredentialsDTO dto);
     }
 }

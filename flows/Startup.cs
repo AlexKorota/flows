@@ -11,6 +11,7 @@ using flows.Domain.Repositories;
 using flows.Domain.Repositories.Interfaces;
 using flows.Domain.Services;
 using flows.Domain.Services.Interfaces;
+using flows.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,9 +43,9 @@ namespace flows
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidIssuer = "ValidIssuer",
-                        ValidAudience = "ValidateAudience",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IssuerSigningSecretKey")),
+                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidAudience = AuthOptions.AUDIENCE,
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ClockSkew = TimeSpan.Zero
@@ -68,6 +69,7 @@ namespace flows
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseRouting();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
