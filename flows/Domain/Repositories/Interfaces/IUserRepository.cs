@@ -13,7 +13,6 @@ namespace flows.Domain.Repositories.Interfaces
         Task Create(User user);
 
         Task<User> GetById(int id);
-        Task<User> GetByEmailAndPassword(string email, string hashPassword);
         Task<User> GetByEmail(string email);
     }
 }

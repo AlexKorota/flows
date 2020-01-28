@@ -30,14 +30,6 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<User> GetByEmailAndPassword(string email, string hashPassword)
-        {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == hashPassword);
-            }
-        }
-
         public async Task<User> GetByEmail(string email)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))

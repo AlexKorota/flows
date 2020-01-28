@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace flows.Domain.Services
 {
@@ -45,8 +46,8 @@ namespace flows.Domain.Services
         public async Task<IReadOnlyCollection<Claim>> GetUserIdentity(CredentialsDTO dto)
         {
             List<Claim> claims = null;
-            var user = await _userRepository.GetByEmailAndPassword(dto.Email, BCrypt.Net.BCrypt.HashPassword(dto.Password, BCrypt.Net.BCrypt.GenerateSalt())); //TODO: вытащить соль из конфига
-            if (user != null)
+            var user = await _userRepository.GetByEmail(dto.Email); //TODO: вытащить соль из конфига
+            if (user != null && Crypto.VerifyHashedPassword(user.Password, dto.Password))
             {
                 claims = new List<Claim>
                 {

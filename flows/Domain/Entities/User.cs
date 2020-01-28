@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Web.Helpers;
+
 
 namespace flows.Domain.Entities
 {
@@ -19,8 +16,8 @@ namespace flows.Domain.Entities
             set 
             {
                 if (_password == null) 
-                    _password = BCrypt.Net.BCrypt.HashPassword(value, BCrypt.Net.BCrypt.GenerateSalt()); //TODO: вытащить соль из конфига
-            } 
+                    _password = Crypto.HashPassword(value);
+            }
         }
         public string Email { get; set; }
         public string Name { get; set; }
