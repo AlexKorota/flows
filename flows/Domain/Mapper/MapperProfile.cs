@@ -23,6 +23,3 @@ namespace flows.Domain.Mapper
         }
     }
 }
-
-
-//BCrypt.Net.BCrypt.HashPassword(dto.Password, BCrypt.Net.BCrypt.GenerateSalt())

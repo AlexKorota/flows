@@ -42,6 +42,9 @@ namespace flows.Controllers
         public async Task<ActionResult<UserDTO>> GetMe()
         {
             var email = User.FindFirst(User.Identity.Name)?.Value;
+            if (email == null)
+                return BadRequest();
+
             var res = await _userService.GetUserAsync(email);
             return new OkObjectResult(res);
         }
@@ -49,6 +52,9 @@ namespace flows.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register([FromBody] RegistrationDTO dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
             await _userService.RegisterUserAsync(dto);
             return new OkResult();
         }
@@ -56,6 +62,9 @@ namespace flows.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CredentialsDTO dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
             var identity = await _userService.GetUserIdentityAsync(dto);
             if (identity == null)
                 return Unauthorized();
