@@ -48,6 +48,7 @@ namespace flows.Domain.Services
             } catch(Exception e) // переделать на разные эксепшены, а не только на 1 общий
             {
                 Console.WriteLine(e);
+                throw e;
             }
         }
 
@@ -59,7 +60,8 @@ namespace flows.Domain.Services
             {
                 claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 };
             }
             return claims;

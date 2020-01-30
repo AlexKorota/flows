@@ -19,18 +19,18 @@ namespace flows.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<List<UserDTO>>> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
             var res = await _userService.GetUsersAsync();
             return new OkObjectResult(res);
@@ -39,9 +39,9 @@ namespace flows.Controllers
         [Authorize]
         [HttpGet("me")]
         // GET: api/Users/me
-        public async Task<ActionResult<UserDTO>> GetMe()
+        public async Task<IActionResult> GetMe()
         {
-            var email = User.FindFirst(User.Identity.Name)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null)
                 return BadRequest();
 
@@ -50,7 +50,7 @@ namespace flows.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register([FromBody] RegistrationDTO dto)
+        public async Task<IActionResult> Register([FromBody] RegistrationDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -69,13 +69,7 @@ namespace flows.Controllers
             if (identity == null)
                 return Unauthorized();
 
-            var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.ISSUER,
-                audience: AuthOptions.AUDIENCE,
-                notBefore: DateTime.UtcNow,
-                claims: identity,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var jwt = JwtCreator.Create(identity);
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             return new OkObjectResult(new { access_token = encodedJwt });
