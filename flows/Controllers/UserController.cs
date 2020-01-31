@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using flows.Data;
-using flows.Domain.Entities;
 using flows.Domain.Services.Interfaces;
 using flows.Domain.DTO;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using flows.Helpers;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace flows.Controllers
