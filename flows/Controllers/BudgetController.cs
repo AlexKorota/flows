@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using flows.Domain.DTO.Budget;
 using flows.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,32 +34,50 @@ namespace flows.Controllers
 
         // GET: api/Budget/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBudget(int id)
+        public async Task<IActionResult> GetBudget(int budgetId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return BadRequest();
 
-            var res = await _budgetService.GetUserBudget(id, int.Parse(userId));
+            var res = await _budgetService.GetUserBudget(budgetId, int.Parse(userId));
             return new OkObjectResult(res);
         }
 
         // POST: api/Budget
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] BudgetDTO dto)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return BadRequest();
+
+            var res = await _budgetService.CreateUserBudget(dto, int.Parse(userId));
+            return new OkObjectResult(res);
         }
 
         // PUT: api/Budget/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] EditBudgetDTO dto)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return BadRequest();
+
+            var res = await _budgetService.EditUserBudget(dto, int.Parse(userId));
+            return new OkObjectResult(res);
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int budgetId)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return BadRequest();
+
+            await _budgetService.DeleteUserBudget(budgetId, int.Parse(userId));
+            return new OkResult();
         }
     }
 }
