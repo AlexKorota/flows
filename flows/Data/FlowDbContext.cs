@@ -18,6 +18,12 @@ namespace flows.Data
             builder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            builder.Entity<Budget>();
+
+            builder.Entity<Expense>();
+
+            builder.Entity<ExpensesGroup>();
         }
     }
 }

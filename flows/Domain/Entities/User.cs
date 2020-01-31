@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Web.Helpers;
 
 
@@ -23,5 +24,9 @@ namespace flows.Domain.Entities
         public string Name { get; set; }
         public string TelegramId { get; set; }
         public bool IsAdmin { get; }
+
+        public List<Budget> Budgets { get; set; }
+        public List<Expense> Expenses { get; set; }
+        public List<ExpensesGroup> ExpensesGroups { get; set; }
     }
 }
