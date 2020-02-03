@@ -7,6 +7,7 @@ using AutoMapper;
 using flows.Data;
 using flows.Data.Factories;
 using flows.Data.Interfaces;
+using flows.Domain.Entities;
 using flows.Domain.Repositories;
 using flows.Domain.Repositories.Interfaces;
 using flows.Domain.Services;
@@ -53,7 +54,7 @@ namespace flows
                 });
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
-            services.AddScoped<IUserRepository, UserRepository>(provider => new UserRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
+            services.AddScoped<IGenericRepository<User>, UserRepository>(provider => new UserRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
             services.AddScoped<IUserService, UserService>();
             
         }

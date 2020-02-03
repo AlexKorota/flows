@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace flows.Domain.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository<T> : IGenericRepository<T> where T : User
     {
-        Task<List<User>> GetListAsync();
-
-        Task CreateAsync(User user);
-
-        Task<User> GetAsync(int id);
-        Task<User> GetAsync(string email);
     }
 }

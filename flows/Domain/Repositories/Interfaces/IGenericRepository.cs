@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace flows.Domain.Repositories.Interfaces
 {
-    interface IGenericRepository<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity> where TEntity : class
     {
         Task Create(TEntity item);
         Task<TEntity> FindById(int id);

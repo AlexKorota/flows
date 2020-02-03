@@ -10,40 +10,8 @@ using System.Threading.Tasks;
 
 namespace flows.Domain.Repositories
 {
-    public class UserRepository : BaseRepository, IUserRepository
+    public class UserRepository : GenericRepository<User>
     {
         public UserRepository(string connectionString, IFlowDbContextFactory contextFactory) : base(connectionString, contextFactory) { }
-
-        public async Task<List<User>> GetListAsync()
-        {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Users.ToListAsync();
-            }
-        }
-        public async Task CreateAsync(User user)
-        {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<User> GetAsync(string email)
-        {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            }
-        }
-
-        public async Task<User> GetAsync(int id)
-        {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            }
-        }
     }
 }
