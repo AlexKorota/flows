@@ -55,6 +55,7 @@ namespace flows
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
             services.AddScoped<IGenericRepository<User>, UserRepository>(provider => new UserRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
+            services.AddScoped<IGenericRepository<Budget>, BudgetRepository>(provider => new BudgetRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
             services.AddScoped<IUserService, UserService>();
             
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace flows.Domain.Repositories
 {
-    public class BudgetRepository<T> : GenericRepository<T> where T : Budget
+    public class BudgetRepository : GenericRepository<Budget> 
     {
         public BudgetRepository(string connectionString, IFlowDbContextFactory contextFactory) : base(connectionString, contextFactory) { }
     }

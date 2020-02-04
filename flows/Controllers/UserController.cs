@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using flows.Helpers;
 using System.Security.Claims;
+using System;
 
 namespace flows.Controllers
 {
@@ -36,9 +37,16 @@ namespace flows.Controllers
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null)
                 return BadRequest();
-
-            var res = await _userService.GetUserAsync(email);
-            return new OkObjectResult(res);
+            UserDTO dto = new UserDTO();
+            try
+            {
+                dto = await _userService.GetUserAsync(email);
+            } catch (ArgumentNullException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+                
+            return new OkObjectResult(dto);
         }
 
         [HttpPost("register")]

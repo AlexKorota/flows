@@ -14,9 +14,9 @@ namespace flows.Domain.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IMapper _mapper;
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IGenericRepository<User> userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -24,18 +24,21 @@ namespace flows.Domain.Services
 
         public async Task<List<UserDTO>> GetUsersAsync()
         {
-            var users = await _userRepository.GetListAsync();
+            var users = await _userRepository.GetAllAsync();
             return users.Select(u => _mapper.Map<UserDTO>(u)).ToList();
         }
         public async Task<UserDTO> GetUserAsync(int id)
         {
-            var user = await _userRepository.GetAsync(id);
+            var user = await _userRepository.FindByIdAsync(id);
             return _mapper.Map<UserDTO>(user);
         }
 
         public async Task<UserDTO> GetUserAsync(string email)
         {
-            var user = await _userRepository.GetAsync(email);
+            var res = await _userRepository.GetAsync(x => x.Email.Equals(email));
+            var user = res.FirstOrDefault();
+            if (user == null)
+                throw new ArgumentNullException("can't find user");
             return _mapper.Map<UserDTO>(user);
         }
 
@@ -55,7 +58,8 @@ namespace flows.Domain.Services
         public async Task<IReadOnlyCollection<Claim>> GetUserIdentityAsync(CredentialsDTO dto)
         {
             List<Claim> claims = null;
-            var user = await _userRepository.GetAsync(dto.Email);
+            var res = await _userRepository.GetAsync(x => x.Email.Equals(dto.Email));
+            User user = res.FirstOrDefault();
             if (user != null && Crypto.VerifyHashedPassword(user.Password, dto.Password))
             {
                 claims = new List<Claim>

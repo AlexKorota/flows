@@ -1,4 +1,7 @@
-﻿using flows.Domain.DTO.Budget;
+﻿using AutoMapper;
+using flows.Domain.DTO.Budget;
+using flows.Domain.Entities;
+using flows.Domain.Repositories.Interfaces;
 using flows.Domain.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,10 +12,12 @@ namespace flows.Domain.Services
 {
     public class BudgetService : IBudgetService
     {
-        private readonly IBudgetRepository _budgetRepository;
-        public BudgetService()
+        private readonly IGenericRepository<Budget> _budgetRepository;
+        private readonly IMapper _mapper;
+        public BudgetService(IGenericRepository<Budget> budgetRepository, IMapper mapper)
         {
-                
+            _budgetRepository = budgetRepository;
+            _mapper = mapper;
         }
         public Task<List<BudgetDTO>> GetAllUserBudgets(int userId)
         {

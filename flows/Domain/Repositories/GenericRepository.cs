@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace flows.Domain.Repositories
@@ -20,7 +21,7 @@ namespace flows.Domain.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cToken = default)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -28,7 +29,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<TEntity> FindById(int id)
+        public async Task<TEntity> FindByIdAsync(int id, CancellationToken cToken = default)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -36,7 +37,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cToken = default)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -44,7 +45,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task Create(TEntity item)
+        public async Task CreateAsync(TEntity item, CancellationToken cToken = default)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -53,7 +54,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task Update(TEntity item)
+        public async Task UpdateAsync(TEntity item, CancellationToken cToken = default)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -62,7 +63,7 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task Remove(TEntity item)
+        public async Task RemoveAsync(TEntity item, CancellationToken cToken = default)
         {
             using (var context = _contextFactory.CreateDbContext(_connectionString))
             {
@@ -71,12 +72,12 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return await Include(includeProperties).ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetWithInclude(Func<TEntity, bool> predicate,
+        public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(Func<TEntity, bool> predicate,
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return await Task.Run(() => Include(includeProperties).Where(predicate).ToList()); // Проверить корректность работы. Не уверен в верности реализации
