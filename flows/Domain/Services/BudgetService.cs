@@ -6,6 +6,7 @@ using flows.Domain.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace flows.Domain.Services
@@ -19,23 +20,28 @@ namespace flows.Domain.Services
             _budgetRepository = budgetRepository;
             _mapper = mapper;
         }
-        public Task<List<BudgetDTO>> GetAllUserBudgets(int userId)
+        public async Task<List<BudgetDTO>> GetAllUserBudgets(int userId)
         {
-            throw new NotImplementedException();
+            var budgets = await _budgetRepository.GetAsync(x => x.OwnerId.Equals(userId));
+            return budgets.Select(b => _mapper.Map<BudgetDTO>(b)).ToList();
         }
 
-        public Task<BudgetDTO> GetUserBudget(int budgetId, int userId)
+        public async Task<BudgetDTO> GetUserBudget(int budgetId, int userId)
         {
-            throw new NotImplementedException();
+            var res = await _budgetRepository.GetWithIncludeAsync(new CancellationToken(), x => x.Id == budgetId && x.OwnerId == userId, x => x.Expenses);
+            if (res.Count() == 0)
+                throw new ArgumentOutOfRangeException("can't find budget or you haven't enough permissions");
+            return _mapper.Map<BudgetDTO>(res.FirstOrDefault());
         }
-        public Task<BudgetDTO> CreateUserBudget(BudgetDTO dto, int userId)
+        public async Task CreateUserBudget(BudgetDTO dto, int userId)
         {
-            throw new NotImplementedException();
+            Budget budget = _mapper.Map<Budget>(dto);
+            await _budgetRepository.CreateAsync(budget);
         }
 
-        public Task DeleteUserBudget(int budgetId, int userId)
+        public async Task DeleteUserBudget(int budgetId, int userId)
         {
-            throw new NotImplementedException();
+            await _budgetRepository.RemoveAsync(x => x.Id == budgetId && x.OwnerId == userId);
         }
 
         public Task<BudgetDTO> EditUserBudget(EditBudgetDTO dto, int userId)

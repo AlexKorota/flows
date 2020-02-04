@@ -15,5 +15,9 @@ namespace flows.Domain.Repositories.Interfaces
         Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cToken = default);
         Task UpdateAsync(TEntity item, CancellationToken cToken = default);
         Task RemoveAsync(TEntity item, CancellationToken cToken = default);
+        Task RemoveAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cToken = default, CancellationToken cToken = default);
+        Task<IEnumerable<TEntity>> GetWithIncludeAsync(CancellationToken cToken = default, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<IEnumerable<TEntity>> GetWithIncludeAsync(Func<TEntity, bool> predicate, CancellationToken cToken = default,
+            params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

@@ -36,23 +36,15 @@ namespace flows.Domain.Services
         public async Task<UserDTO> GetUserAsync(string email)
         {
             var res = await _userRepository.GetAsync(x => x.Email.Equals(email));
-            var user = res.FirstOrDefault();
-            if (user == null)
-                throw new ArgumentNullException("can't find user");
-            return _mapper.Map<UserDTO>(user);
+            if (res.Count() == 0)
+                throw new ArgumentOutOfRangeException("can't find user");
+            return _mapper.Map<UserDTO>(res.FirstOrDefault());
         }
 
         public async Task RegisterUserAsync(RegistrationDTO dto)
         {
-            try
-            {
-                User user = _mapper.Map<User>(dto);
-                await _userRepository.CreateAsync(user);
-            } catch(Exception e) // переделать на разные эксепшены, а не только на 1 общий
-            {
-                Console.WriteLine(e);
-                throw e;
-            }
+            User user = _mapper.Map<User>(dto);
+            await _userRepository.CreateAsync(user);
         }
 
         public async Task<IReadOnlyCollection<Claim>> GetUserIdentityAsync(CredentialsDTO dto)

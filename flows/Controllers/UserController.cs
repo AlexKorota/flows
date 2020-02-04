@@ -42,7 +42,7 @@ namespace flows.Controllers
                 UserDTO dto = await _userService.GetUserAsync(email);
                 return new OkObjectResult(dto);
             } 
-            catch (ArgumentNullException e)
+            catch (ArgumentOutOfRangeException e)
             {
                 return new BadRequestObjectResult(e.Message);
             }

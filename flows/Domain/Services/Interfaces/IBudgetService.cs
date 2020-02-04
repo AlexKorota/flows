@@ -10,7 +10,7 @@ namespace flows.Domain.Services.Interfaces
     {
         public Task<List<BudgetDTO>> GetAllUserBudgets(int userId);
         public Task<BudgetDTO> GetUserBudget(int budgetId, int userId);
-        public Task<BudgetDTO> CreateUserBudget(BudgetDTO dto, int userId);
+        public Task CreateUserBudget(BudgetDTO dto, int userId);
         public Task<BudgetDTO> EditUserBudget(EditBudgetDTO dto, int userId);
         public Task DeleteUserBudget(int budgetId, int userId);
     }
