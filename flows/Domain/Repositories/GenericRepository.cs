@@ -72,12 +72,22 @@ namespace flows.Domain.Repositories
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task RemoveAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cToken = default)
+        {
+            using (var context = _contextFactory.CreateDbContext(_connectionString))
+            {
+                var dbSet = context.Set<TEntity>();
+                dbSet.RemoveRange(dbSet.AsNoTracking().Where(predicate).ToList());
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(CancellationToken cToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return await Include(includeProperties).ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(Func<TEntity, bool> predicate,
+        public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(Func<TEntity, bool> predicate, CancellationToken cToken = default,
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return await Task.Run(() => Include(includeProperties).Where(predicate).ToList()); // Проверить корректность работы. Не уверен в верности реализации

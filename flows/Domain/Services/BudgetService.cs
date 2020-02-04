@@ -33,10 +33,11 @@ namespace flows.Domain.Services
                 throw new ArgumentOutOfRangeException("can't find budget or you haven't enough permissions");
             return _mapper.Map<BudgetDTO>(res.FirstOrDefault());
         }
-        public async Task CreateUserBudget(BudgetDTO dto, int userId)
+        public async Task<BudgetDTO> CreateUserBudget(BudgetDTO dto, int userId)
         {
             Budget budget = _mapper.Map<Budget>(dto);
             await _budgetRepository.CreateAsync(budget);
+            return _mapper.Map<BudgetDTO>(budget); // TODO: Проверить, добавится ли idшник
         }
 
         public async Task DeleteUserBudget(int budgetId, int userId)
