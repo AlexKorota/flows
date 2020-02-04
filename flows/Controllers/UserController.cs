@@ -37,16 +37,15 @@ namespace flows.Controllers
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (email == null)
                 return BadRequest();
-            UserDTO dto = new UserDTO();
             try
             {
-                dto = await _userService.GetUserAsync(email);
-            } catch (ArgumentNullException e)
+                UserDTO dto = await _userService.GetUserAsync(email);
+                return new OkObjectResult(dto);
+            } 
+            catch (ArgumentNullException e)
             {
                 return new BadRequestObjectResult(e.Message);
             }
-                
-            return new OkObjectResult(dto);
         }
 
         [HttpPost("register")]
