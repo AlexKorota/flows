@@ -8,7 +8,7 @@ using flows.Data;
 
 namespace flows.Data.Migrations
 {
-    [DbContext(typeof(FlowDbContext))]
+    [DbContext(typeof(FlowsDbContext))]
     [Migration("20200120103549_ChangeUserModel")]
     partial class ChangeUserModel
     {

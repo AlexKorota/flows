@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using flows.Data;
 using flows.Data.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,10 +27,8 @@ namespace flows
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-
-                var factory = services.GetRequiredService<IFlowDbContextFactory>();
-
-                factory.CreateDbContext(config.GetConnectionString("Database")).Database.Migrate();
+                var context = services.GetRequiredService<FlowsDbContext>();
+                context.Database.Migrate();
             }
             host.Run();
         }

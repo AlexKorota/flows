@@ -1,5 +1,6 @@
 ﻿using flows.Data;
 using flows.Data.Factories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -10,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace flows
 {
-    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<FlowDbContext>
+    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<FlowsDbContext>
     {
-		public FlowDbContext CreateDbContext(string[] args)
+		public FlowsDbContext CreateDbContext(string[] args)
 		{
 			var builder = new ConfigurationBuilder()
 					  .SetBasePath(Directory.GetCurrentDirectory())
@@ -20,9 +21,10 @@ namespace flows
 
 			var config = builder.Build();
 			var connectionString = config.GetConnectionString("Database");
-			var repositoryFactory = new FlowDbContextFactory();
+			var optionsBuilder = new DbContextOptionsBuilder<FlowsDbContext>();
+			optionsBuilder.UseSqlServer(connectionString);
 
-			return repositoryFactory.CreateDbContext(connectionString);
+			return new FlowsDbContext(optionsBuilder.Options);
 		}
 	}
 }

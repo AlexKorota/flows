@@ -9,7 +9,7 @@ using flows.Data;
 
 namespace flows.Data.Migrations
 {
-    [DbContext(typeof(FlowDbContext))]
+    [DbContext(typeof(FlowsDbContext))]
     [Migration("20200131114024_AddExpensesExpGroupsAndBudgetTables")]
     partial class AddExpensesExpGroupsAndBudgetTables
     {

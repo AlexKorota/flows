@@ -12,6 +12,6 @@ namespace flows.Domain.Repositories
 {
     public class UserRepository : GenericRepository<User>
     {
-        public UserRepository(string connectionString, IFlowDbContextFactory contextFactory) : base(connectionString, contextFactory) { }
+        public UserRepository(FlowsDbContext context) : base(context) { }
     }
 }

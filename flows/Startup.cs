@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -53,9 +54,12 @@ namespace flows
                     };
                 });
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IFlowDbContextFactory, FlowDbContextFactory>();
-            services.AddScoped<IGenericRepository<User>, UserRepository>(provider => new UserRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
-            services.AddScoped<IGenericRepository<Budget>, BudgetRepository>(provider => new BudgetRepository(_configuration.GetConnectionString("Database"), provider.GetService<IFlowDbContextFactory>()));
+            services.AddDbContext<FlowsDbContext>(options =>
+            {
+                options.UseSqlServer(_configuration.GetConnectionString("Database"));
+            });
+            services.AddScoped<IGenericRepository<User>, UserRepository>();
+            services.AddScoped<IGenericRepository<Budget>, BudgetRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBudgetService, BudgetService>();
             

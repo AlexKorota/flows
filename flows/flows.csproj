@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Data\20200117143803_InitialMigration.cs" />
     <Compile Remove="Data\20200117143803_InitialMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200206160131_budgetsMigration.cs" />
+    <Compile Remove="Data\Migrations\20200206160131_budgetsMigration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200206160749_removeownerIdFromExpensesGroups.cs" />
+    <Compile Remove="Data\Migrations\20200206160749_removeownerIdFromExpensesGroups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +28,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
   </ItemGroup>
 

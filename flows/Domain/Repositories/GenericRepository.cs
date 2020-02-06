@@ -1,4 +1,5 @@
-﻿using flows.Data.Interfaces;
+﻿using flows.Data;
+using flows.Data.Interfaces;
 using flows.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,74 +13,55 @@ namespace flows.Domain.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        protected string _connectionString { get; }
-        protected IFlowDbContextFactory _contextFactory { get; }
+        private readonly FlowsDbContext _context;
 
-        public GenericRepository(string connectionString, IFlowDbContextFactory contextFactory)
+        public GenericRepository(FlowsDbContext context)
         {
-            _connectionString = connectionString;
-            _contextFactory = contextFactory;
+            _context = context;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Set<TEntity>().AsNoTracking().ToListAsync();
-            }
+
+            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
+
         }
 
         public async Task<TEntity> FindByIdAsync(int id, CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Set<TEntity>().FindAsync(id);
-            }
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
         public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                return await context.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
-            }
+            return await _context.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public async Task CreateAsync(TEntity item, CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                await context.Set<TEntity>().AddAsync(item);
-                await context.SaveChangesAsync();
-            }
+
+            await _context.Set<TEntity>().AddAsync(item);
+            await _context.SaveChangesAsync();
+
         }
 
         public async Task UpdateAsync(TEntity item, CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                context.Entry(item).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(TEntity item, CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                context.Set<TEntity>().Remove(item);
-                await context.SaveChangesAsync();
-            }
+            _context.Set<TEntity>().Remove(item);
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cToken = default)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                var dbSet = context.Set<TEntity>();
-                dbSet.RemoveRange(dbSet.AsNoTracking().Where(predicate).ToList());
-                await context.SaveChangesAsync();
-            }
+            var dbSet = _context.Set<TEntity>();
+            dbSet.RemoveRange(dbSet.AsNoTracking().Where(predicate).ToList());
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetWithIncludeAsync(CancellationToken cToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
@@ -95,12 +77,9 @@ namespace flows.Domain.Repositories
 
         private IQueryable<TEntity> Include(params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            using (var context = _contextFactory.CreateDbContext(_connectionString))
-            {
-                IQueryable<TEntity> query = context.Set<TEntity>().AsNoTracking();
-                return includeProperties
-                    .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            }
+            IQueryable<TEntity> query = _context.Set<TEntity>().AsNoTracking();
+            return includeProperties
+                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
     }
 }

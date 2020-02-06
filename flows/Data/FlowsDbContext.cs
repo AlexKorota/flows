@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace flows.Data
 {
-    public class FlowDbContext : DbContext
+    public class FlowsDbContext : DbContext
     {
-        public FlowDbContext(DbContextOptions<FlowDbContext> options) : base(options) {}
+        public FlowsDbContext(DbContextOptions<FlowsDbContext> options) : base(options) {}
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<ExpensesGroup> ExpensesGroups { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

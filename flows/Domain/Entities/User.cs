@@ -25,8 +25,8 @@ namespace flows.Domain.Entities
         public string TelegramId { get; set; }
         public bool IsAdmin { get; }
 
-        public List<Budget> Budgets { get; set; }
-        public List<Expense> Expenses { get; set; }
-        public List<ExpensesGroup> ExpensesGroups { get; set; }
+        public virtual List<Budget> Budgets { get; set; }
+        public virtual List<Expense> Expenses { get; set; }
+        public virtual List<ExpensesGroup> ExpensesGroups { get; set; }
     }
 }

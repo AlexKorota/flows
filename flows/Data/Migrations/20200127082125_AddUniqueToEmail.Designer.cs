@@ -8,7 +8,7 @@ using flows.Data;
 
 namespace flows.Data.Migrations
 {
-    [DbContext(typeof(FlowDbContext))]
+    [DbContext(typeof(FlowsDbContext))]
     [Migration("20200127082125_AddUniqueToEmail")]
     partial class AddUniqueToEmail
     {
